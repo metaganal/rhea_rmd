@@ -21,15 +21,27 @@ make_network <- function(db, net_seed, n_step = 1, current_step = 0) {
                   label = "",
                   mask = c(network$compoundName_L,
                             network$compoundName_R)) %>%
-    distinct_all() %>%
-    arrange(id)
+    dplyr::distinct_all() %>%
+    dplyr::arrange(id)
   if (current_step == n_step) {
-    edges <- network %>%
-      select(rheaid, compoundID_L, compoundID_R) %>%
-      rename(from = compoundID_L,
-             to = compoundID_R,
-             label = rheaid) %>%
-      select(from, to, label)
+    directions <- db %>%
+      dplyr::filter(rheaid %in% network$rheaid) %>%
+      dplyr::select(rheaid, direction)
+    edges_tmp <- network %>%
+      dplyr::select(rheaid, compoundID_L, compoundID_R) %>%
+      dplyr::inner_join(., directions, by = 'rheaid')
+    edges_reverse <- edges_tmp %>%
+      dplyr::filter(direction == 'L<>R') %>%
+      dplyr::rename(from = compoundID_R,
+                    to = compoundID_L,
+                    label = rheaid) %>%
+      dplyr::select(from, to, label, direction)
+    edges <- edges_tmp %>%
+      dplyr::rename(from = compoundID_L,
+                    to = compoundID_R,
+                    label = rheaid) %>%
+      dplyr::select(from, to, label, direction) %>%
+      dplyr::bind_rows(., edges_reverse)
     return(list(edge = edges,
                 node = nodes))
   } else {
@@ -58,7 +70,7 @@ if (length(ar) < 4) {
 }
 
 
-rhea_reactions <- read_tsv('data/rhea_directed_mono_reactions.tsv')
+rhea_reactions <- read_tsv('data/rhea_direction_annotated_reactions.tsv')
 
 
 rhea_network <- make_network(db = rhea_reactions,
@@ -108,7 +120,7 @@ graph_vis <- ggraph(rhea_graph) +
   geom_edge_link(arrow = arrow(length = unit(4, 'mm')),
                  end_cap = circle(3, 'mm')) +
   geom_node_point(size = 5) +
-  geom_node_text(aes(label = node), repel = TRUE) +
+  geom_node_text(aes(label = mask), repel = TRUE) +
   theme_graph()
 
 ggplot2::ggsave(filename = ar[4],
