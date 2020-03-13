@@ -7,7 +7,7 @@ library(tidyverse)
 
 
 # Read RHEA table
-dframe <- read_tsv("data/rhea_reaction_participants.tsv")
+dframe <- read_tsv("~/digzyme/rhea_20200313.tsv")
 
 
 # Extract reactions

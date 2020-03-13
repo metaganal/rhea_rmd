@@ -1,4 +1,4 @@
-setwd("~/digzyme/rhea_rmd")
+setwd("~/rhea_rmd")
 
 # Function to curate direction by directing compound, e.g. O2
 curate_direction <- function(dframe, id) {

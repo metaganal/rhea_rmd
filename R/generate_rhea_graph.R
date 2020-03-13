@@ -1,4 +1,4 @@
-setwd('~/digzyme/rhea_rmd')
+setwd('~/rhea_rmd')
 set.seed(0)
 
 
