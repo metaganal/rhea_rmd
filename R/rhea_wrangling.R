@@ -6,28 +6,40 @@ setwd("~/rhea_rmd")
 library(tidyverse)
 
 
+# Parse command line arguments
+ar <- commandArgs(trailingOnly = TRUE)
+
+
 # Read RHEA table
-dframe <- read_tsv("~/digzyme/rhea_20200313.tsv")
+dframe <- readr::read_tsv(ar[[1]])
 
 
-# Extract reactions
-reaction_table <- dframe %>%
-  mutate(reactionSide = gsub(".*[0-9]{5}_", "", reactionSide)) %>%
-  select(rheaid, reactionEquation, reactionSide, compoundID, compoundName) %>%
-  arrange(rheaid, reactionSide)
+# Extract IDs from table strings
+rhea_table <- dframe %>%
+  dplyr::mutate(reactionSide = gsub(".*[0-9]{5}_", "", reactionSide)) %>%
+  dplyr::select(rheaid,
+                reactionEquation,
+                reactionSide,
+                compoundID,
+                compoundName) %>%
+  dplyr::arrange(rheaid,
+                 reactionSide)
 
 
-# Extract reaction compounds
-rhea_table <- reaction_table %>%
-  group_by(rheaid, reactionSide) %>%
-  summarise(compound = paste(list(compoundID), collapse = ",")) %>%
-  mutate(compound = str_remove_all(compound, "[c()\\\"]")) %>%
-  pivot_wider(names_from = reactionSide, values_from = compound) %>%
-  inner_join(reaction_table %>% select(rheaid, reactionEquation), .,
-             by = "rheaid") %>%
-  distinct_all()
+# Summarise RHEA IDs variable into one row
+rhea_reactions <- rhea_table %>%
+  dplyr::group_by(rheaid, reactionSide) %>%
+  dplyr::summarise(compound = paste(list(compoundID), collapse = ",")) %>%
+  dplyr::mutate(compound = stringr::str_remove_all(compound, "[c()\\\"]")) %>%
+  tidyr::pivot_wider(names_from = reactionSide,
+                     values_from = compound) %>%
+  dplyr::inner_join(rhea_table %>%
+                      dplyr::select(rheaid, reactionEquation),
+                    .,
+                    by = "rheaid") %>%
+  dplyr::distinct_all()
 
 
 # Write table to output
-write_tsv(rhea_table, "data/rhea_rheaid_participants.tsv")
-write_tsv(reaction_table, "data/rhea_id_side_compound.tsv")
+readr::write_tsv(rhea_table, "data/rhea_db_parsed.tsv")
+readr::write_tsv(rhea_reactions, "data/rhea_db_reactions.tsv")
