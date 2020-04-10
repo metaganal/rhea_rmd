@@ -32,3 +32,16 @@ Some compounds are used to define the directions of enzymatic reaction.
 ```bash
 Rscript R/rhea_table_curation.R data/rhea_db_reactions.tsv data/rhea_db_parsed.tsv
 ```
+
+
+List of outputs:
+* data/rhea_db_parsed.tsv : RHEA DB table (parsed from SPARQL output)
+* data/rhea_db_reactions.tsv : Reaction pairs that include cofactors and generic compounds
+* data/rhea_reactions_* : Curated reaction pairs (only main substrate and product, annotated with reaction direction)
+* data/rhea_reactants_* : Pairing of main substrate and products
+* data/rhea_cofactor_* : Pairing of cofactors in the reaction (cofactors decided based on compounds usage frequency in the DB)
+* data/rhea_generic_* : Reaction pairs with commonly used compound as substrate and products
+* data/rhea_compound_usage : Frequency of compound usage
+
+
+MOL files for Morgan Fingerprint/RDKit input can be downloaded from [RHEA DB](ftp://ftp.expasy.org/databases/rhea/ctfiles/rhea-mol.tar.gz)
