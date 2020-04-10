@@ -22,8 +22,6 @@ curl -H 'Accept: text/tab-separated-values' --data-urlencode 'query@rhea_sparql_
 ```
 
 Wrangle RHEA DB with R to get a table that's easier to process.
-Input: RHEA DB
-Output: RHEA reactions, RHEA compound usage
 ```bash
 Rscript R/rhea_wrangling.R data/rhea_db.tsv
 ```
