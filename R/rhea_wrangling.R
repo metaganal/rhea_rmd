@@ -5,6 +5,7 @@ setwd("~/rhea_rmd")
 # Load package
 library(tidyverse)
 
+run_date <- gsub(Sys.Date(), pattern = "-", replacement = "", fixed = T)
 
 # Parse command line arguments
 ar <- commandArgs(trailingOnly = TRUE)
@@ -41,5 +42,5 @@ rhea_reactions <- rhea_table %>%
 
 
 # Write table to output
-readr::write_tsv(rhea_table, "data/rhea_db_parsed.tsv")
-readr::write_tsv(rhea_reactions, "data/rhea_db_reactions.tsv")
+readr::write_tsv(rhea_table, paste0("data/", run_date, "_rhea_db_parsed.tsv"))
+readr::write_tsv(rhea_reactions, paste0("data/", run_date, "_rhea_db_reactions.tsv"))

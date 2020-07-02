@@ -11,8 +11,11 @@ curate_direction <- function(dframe, id) {
   directed <- dplyr::bind_rows(substrate, product)
 }
 
+
 # Load libraries
 library(tidyverse)
+
+run_date <- gsub(Sys.Date(), pattern = "-", replacement = "", fixed = T)
 
 
 # Parse command line arguments
@@ -156,13 +159,13 @@ full_reaction <- dplyr::bind_rows(mono_reaction, bi_reaction)
 
 
 # Save curated dataframe to files
-readr::write_tsv(main_directed, "data/rhea_reactants_unidirectional.tsv")
-readr::write_tsv(main_bidirectional, "data/rhea_reactants_bidirectional.tsv")
-readr::write_tsv(mono_reaction, "data/rhea_reactions_unidirectional.tsv")
-readr::write_tsv(bi_reaction, "data/rhea_reactions_bidirectional.tsv")
-readr::write_tsv(cofactor_directed, "data/rhea_cofactor_unidirectional.tsv")
-readr::write_tsv(cofactor_bidirectional, "data/rhea_cofactor_bidirectional.tsv")
-readr::write_tsv(generic_main_directed, "data/rhea_generic_unidirectional.tsv")
-readr::write_tsv(generic_main_bidirectional, "data/rhea_generic_bidirectional.tsv")
-readr::write_tsv(compound_freq, "data/rhea_compound_usage.tsv")
-readr::write_tsv(full_reaction, 'data/rhea_reactions_annotated.tsv')
+readr::write_tsv(main_directed, paste0("data/", run_date, "_rhea_reactants_unidirectional.tsv"))
+readr::write_tsv(main_bidirectional, paste0("data/", run_date, "_rhea_reactants_bidirectional.tsv"))
+readr::write_tsv(mono_reaction, paste0("data/", run_date, "_rhea_reactions_unidirectional.tsv"))
+readr::write_tsv(bi_reaction, paste0("data/", run_date, "_rhea_reactions_bidirectional.tsv"))
+readr::write_tsv(cofactor_directed, paste0("data/", run_date, "_rhea_cofactor_unidirectional.tsv"))
+readr::write_tsv(cofactor_bidirectional, paste0("data/", run_date, "_rhea_cofactor_bidirectional.tsv"))
+readr::write_tsv(generic_main_directed, paste0("data/", run_date, "_rhea_generic_unidirectional.tsv"))
+readr::write_tsv(generic_main_bidirectional, paste0("data/", run_date, "_rhea_generic_bidirectional.tsv"))
+readr::write_tsv(compound_freq, paste0("data/", run_date, "_rhea_compound_usage.tsv"))
+readr::write_tsv(full_reaction, paste0("data/", run_date, "_rhea_reactions_annotated.tsv"))
