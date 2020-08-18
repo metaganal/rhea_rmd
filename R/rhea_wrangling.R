@@ -1,5 +1,5 @@
-# Set working directory to the git repository
-setwd("~/rhea_rmd")
+# Set working directory, default to `pwd`
+# setwd("~/rhea_rmd")
 
 
 # Load package
