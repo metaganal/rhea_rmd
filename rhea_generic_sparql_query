@@ -1,0 +1,18 @@
+PREFIX rh:<http://rdf.rhea-db.org/>
+SELECT ?compoundAc ?chebi
+       (count(distinct ?reaction) as ?reactionCount)
+       ?compoundName ?chebiLabel
+WHERE {
+  ?reaction rdfs:subClassOf rh:Reaction .
+  ?reaction rh:status rh:Approved .
+  ?reaction rh:side ?reactionSide .
+  ?reactionSide rh:contains ?participant .
+  ?participant rh:compound ?compound .
+  ?compound rh:name ?compoundName .
+  ?compound rh:accession ?compoundAc .
+  ?compound rh:reactivePart ?genericChebi .
+  ?genericChebi rh:chebi ?chebi .
+  ?chebi rdfs:label ?chebiLabel .
+}
+GROUP BY ?compoundAc ?chebi ?compoundName ?chebiLabel
+ORDER BY DESC(?reactionCount)
