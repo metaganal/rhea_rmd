@@ -1,6 +1,8 @@
 PREFIX rh:<http://rdf.rhea-db.org/>
 PREFIX ch:<http://purl.obolibrary.org/obo/>
-SELECT ?reaction ?rheaid ?reactionEquation ?reactionSide ?participant ?compoundID ?compoundName WHERE {
+SELECT ?reaction ?rheaid ?reactionEquation ?reactionSide ?participant
+       ?compoundID ?compoundName
+WHERE {
   ?reaction rdfs:subClassOf rh:Reaction .
   ?reaction rh:equation ?reactionEquation .
   ?reaction rh:accession ?rheaid .
