@@ -1,8 +1,10 @@
 #!/bin/sh
 
-out_file="$1"
+input_query="$1"
+out_file="$2"
 
 
 set -x
-curl -H 'Accept: text/tab-separated-values' --data-urlencode 'query@rhea_sparql_query' https://sparql.rhea-db.org/sparql > "$out_file"
+curl -H 'Accept: text/tab-separated-values' --data-urlencode 'query@'"$input_query" \
+    https://sparql.rhea-db.org/sparql > "$out_file"
 
